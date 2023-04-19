@@ -55,9 +55,9 @@ class Home extends Component {
           ? (<p>Nenhum produto foi encontrado</p>)
           : (productsList.map((product) => (
             <div data-testid="product" key={ product.id }>
-              <p>{productsList.title}</p>
-              <img src={ productsList.thumbnail } alt={ productsList.title } />
-              <p>{productsList.price}</p>
+              <p>{product.title}</p>
+              <img src={ product.thumbnail } alt={ product.title } />
+              <p>{product.price}</p>
             </div>
           )))}
       </div>
