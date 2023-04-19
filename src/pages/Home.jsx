@@ -8,11 +8,21 @@ class Home extends Component {
     nome: '',
     category: '',
     productsList: [],
+    isLoading: false,
   };
 
   handleClickBusca = async () => {
     const { nome, category } = this.state;
     const result = await getProductsFromCategoryAndQuery(category, nome);
+    if (result.results.length === 0) {
+      this.setState({
+        isLoading: true,
+      });
+    } else {
+      this.setState({
+        isLoading: false,
+      });
+    }
     this.setState({
       productsList: result.results,
     });
@@ -25,7 +35,7 @@ class Home extends Component {
   };
 
   render() {
-    const { productsList } = this.state;
+    const { productsList, isLoading } = this.state;
     return (
       <div>
         <p
@@ -51,7 +61,7 @@ class Home extends Component {
         >
           <button>carrinho</button>
         </Link>
-        {productsList.length === 0
+        {isLoading
           ? (<p>Nenhum produto foi encontrado</p>)
           : (productsList.map((product) => (
             <div data-testid="product" key={ product.id }>
