@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
+import { getCategories, getProductById } from '../services/api';
 
 class CategoryList extends Component {
   state = {
     categories: [],
+    productsCategory: [],
   };
 
   componentDidMount() {
@@ -17,17 +18,50 @@ class CategoryList extends Component {
     });
   };
 
+  handleClickCategory = async (event) => {
+    const { id } = event.target;
+    console.log(id);
+    const result = await getProductById(id);
+    console.log(result);
+
+    this.setState({
+      productsCategory: result.results,
+    });
+  };
+
+  /*  handleChange = ( }) => {
+    this.setState({
+      name: id,
+    }, this.handleClickCategory());
+  }; */
+
   render() {
-    const { categories } = this.state;
+    const { categories, productsCategory } = this.state;
     return (
       <div>
         <h1>Categorias</h1>
         <ul>
           {categories.map((i) => (
             <label key={ i.id } data-testid="category" htmlFor="category">
-              <button name="category" type="radio">{i.name}</button>
+              <button
+                name="category"
+                type="radio"
+                onClick={ this.handleClickCategory }
+                id={ i.id }
+              >
+                {i.name}
+              </button>
             </label>
           ))}
+          {
+            productsCategory.map((product) => (
+              <div data-testid="product" key={ product.id }>
+                <p>{product.title}</p>
+                <img src={ product.thumbnail } alt={ product.title } />
+                <p>{product.price}</p>
+              </div>
+            ))
+          }
         </ul>
       </div>
     );
